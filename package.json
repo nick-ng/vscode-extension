@@ -1,0 +1,34 @@
+{
+	"name": "nick-vscode-extension",
+	"displayName": "Nick's VS Code Extension",
+	"description": "A VS Code for Nick",
+	"categories": [
+		"Themes"
+	],
+	"version": "0.1.2",
+	"publisher": "nick-ng",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nick-ng/vscode-extension.git"
+	},
+	"icon": "narwhal-256.png",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.0.0"
+	},
+	"scripts": {
+		"package": "vsce package"
+	},
+	"contributes": {
+		"iconThemes": [
+			{
+				"id": "vs-nick",
+				"label": "Nick Icons",
+				"path": "./icons/nick-icon-theme.json"
+			}
+		]
+	},
+	"devDependencies": {
+		"@vscode/vsce": "^2.19.0"
+	}
+}
