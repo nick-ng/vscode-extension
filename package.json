@@ -1,25 +1,40 @@
 {
 	"name": "nick-vscode-extension",
 	"displayName": "Nick's VS Code Extension",
-	"description": "A VS Code for Nick",
+	"description": "My VS Code Extension",
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nick-ng/vscode-extension.git"
 	},
-	"icon": "narwhal-256.png",
+	"icon": "/icons/nick_one.png",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.0.0"
 	},
+	"main": "js/main.cjs",
+	"activationEvents": [
+		"onStartupFinished"
+	],
 	"scripts": {
+		"start": "npm run package",
 		"package": "vsce package"
 	},
 	"contributes": {
+		"commands": [
+			{
+				"command": "extension.nickTest",
+				"title": "Pants"
+			},
+			{
+				"command": "extension.nickToggleUseIgnoreFiles",
+				"title": "Toggle Use Ignore Files"
+			}
+		],
 		"iconThemes": [
 			{
 				"id": "vs-nick",
