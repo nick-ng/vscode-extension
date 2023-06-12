@@ -27,10 +27,6 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.nickTest",
-				"title": "Pants"
-			},
-			{
 				"command": "extension.nickToggleUseIgnoreFiles",
 				"title": "Toggle Use Ignore Files"
 			}
