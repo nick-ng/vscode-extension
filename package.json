@@ -5,13 +5,13 @@
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nick-ng/vscode-extension.git"
 	},
-	"icon": "/icons/nick_one.png",
+	"icon": "/icons/nick_001.png",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.0.0"
@@ -28,7 +28,87 @@
 		"commands": [
 			{
 				"command": "extension.nickToggleUseIgnoreFiles",
-				"title": "Toggle Use Ignore Files"
+				"title": "Nick: Toggle Use Ignore Files"
+			},
+			{
+				"command": "extension.nickSetBookmark0",
+				"title": "Nick: Set Bookmark 0"
+			},
+			{
+				"command": "extension.nickSetBookmark1",
+				"title": "Nick: Set Bookmark 1"
+			},
+			{
+				"command": "extension.nickSetBookmark2",
+				"title": "Nick: Set Bookmark 2"
+			},
+			{
+				"command": "extension.nickSetBookmark3",
+				"title": "Nick: Set Bookmark 3"
+			},
+			{
+				"command": "extension.nickSetBookmark4",
+				"title": "Nick: Set Bookmark 4"
+			},
+			{
+				"command": "extension.nickSetBookmark5",
+				"title": "Nick: Set Bookmark 5"
+			},
+			{
+				"command": "extension.nickSetBookmark6",
+				"title": "Nick: Set Bookmark 6"
+			},
+			{
+				"command": "extension.nickSetBookmark7",
+				"title": "Nick: Set Bookmark 7"
+			},
+			{
+				"command": "extension.nickSetBookmark8",
+				"title": "Nick: Set Bookmark 8"
+			},
+			{
+				"command": "extension.nickSetBookmark9",
+				"title": "Nick: Set Bookmark 9"
+			},
+			{
+				"command": "extension.nickGoToBookmark0",
+				"title": "Nick: Go To Bookmark 0"
+			},
+			{
+				"command": "extension.nickGoToBookmark1",
+				"title": "Nick: Go To Bookmark 1"
+			},
+			{
+				"command": "extension.nickGoToBookmark2",
+				"title": "Nick: Go To Bookmark 2"
+			},
+			{
+				"command": "extension.nickGoToBookmark3",
+				"title": "Nick: Go To Bookmark 3"
+			},
+			{
+				"command": "extension.nickGoToBookmark4",
+				"title": "Nick: Go To Bookmark 4"
+			},
+			{
+				"command": "extension.nickGoToBookmark5",
+				"title": "Nick: Go To Bookmark 5"
+			},
+			{
+				"command": "extension.nickGoToBookmark6",
+				"title": "Nick: Go To Bookmark 6"
+			},
+			{
+				"command": "extension.nickGoToBookmark7",
+				"title": "Nick: Go To Bookmark 7"
+			},
+			{
+				"command": "extension.nickGoToBookmark8",
+				"title": "Nick: Go To Bookmark 8"
+			},
+			{
+				"command": "extension.nickGoToBookmark9",
+				"title": "Nick: Go To Bookmark 9"
 			}
 		],
 		"iconThemes": [
@@ -37,7 +117,17 @@
 				"label": "Nick Icons",
 				"path": "./icons/nick-icon-theme.json"
 			}
-		]
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "nick.BookmarksView",
+					"type": "webview",
+					"name": "Nick: Bookmarks",
+					"when": "true"
+				}
+			]
+		}
 	},
 	"devDependencies": {
 		"@vscode/vsce": "^2.19.0"

@@ -27,7 +27,7 @@ const updateStatusBar = (state) => {
 	}
 };
 
-const toggleUseIgnoreFileMaker = (_context) => {
+const toggleUseIgnoreFileMaker = (context) => {
 	const startingSetting = getUseIgnoreFilesState();
 
 	updateStatusBar(startingSetting);
@@ -35,24 +35,25 @@ const toggleUseIgnoreFileMaker = (_context) => {
 	myStatusBar.show();
 	myStatusBar.command = command;
 
-	return {
-		command,
-		callback: async () => {
-			vscode.commands.executeCommand("workbench.action.closeQuickOpen");
+	const callback = async () => {
+		vscode.commands.executeCommand("workbench.action.closeQuickOpen");
 
-			const nextSetting = !getUseIgnoreFilesState();
+		const nextSetting = !getUseIgnoreFilesState();
 
-			await vscode.workspace
-				.getConfiguration()
-				.update(
-					"search.useIgnoreFiles",
-					nextSetting,
-					vscode.ConfigurationTarget.Global
-				);
+		await vscode.workspace
+			.getConfiguration()
+			.update(
+				"search.useIgnoreFiles",
+				nextSetting,
+				vscode.ConfigurationTarget.Global
+			);
 
-			updateStatusBar(nextSetting);
-		},
+		updateStatusBar(nextSetting);
 	};
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(command, callback)
+	);
 };
 
 module.exports = {
