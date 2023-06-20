@@ -1,57 +1,69 @@
 {
 	"iconDefinitions": {
-		"_nick_one": {
-			"iconPath": "./nick_one.png"
+		"_nick_001": {
+			"iconPath": "./nick_001.png"
 		},
-		"_nick_two": {
-			"iconPath": "./nick_two.png"
+		"_nick_002": {
+			"iconPath": "./nick_002.png"
 		},
-		"_nick_three": {
-			"iconPath": "./nick_three.png"
+		"_nick_003": {
+			"iconPath": "./nick_003.png"
 		},
-		"_nick_four": {
-			"iconPath": "./nick_four.png"
+		"_nick_004": {
+			"iconPath": "./nick_004.png"
 		},
-		"_nick_five": {
-			"iconPath": "./nick_five.png"
+		"_nick_005": {
+			"iconPath": "./nick_005.png"
 		},
-		"_nick_six": {
-			"iconPath": "./nick_six.png"
+		"_nick_006": {
+			"iconPath": "./nick_006.png"
 		},
-		"_nick_seven": {
-			"iconPath": "./nick_seven.png"
+		"_nick_007": {
+			"iconPath": "./nick_007.png"
 		},
-		"_nick_eight": {
-			"iconPath": "./nick_eight.png"
+		"_nick_008": {
+			"iconPath": "./nick_008.png"
 		},
-		"_nick_nine": {
-			"iconPath": "./nick_nine.png"
+		"_nick_009": {
+			"iconPath": "./nick_009.png"
 		},
-		"_nick_ten": {
-			"iconPath": "./nick_ten.png"
+		"_nick_010": {
+			"iconPath": "./nick_010.png"
+		},
+		"_nick_011": {
+			"iconPath": "./nick_011.png"
+		},
+		"_nick_012": {
+			"iconPath": "./nick_012.png"
+		},
+		"_nick_013": {
+			"iconPath": "./nick_013.png"
 		},
 		"_raymond_chen": {
 			"iconPath": "./raymond-chen.png"
 		}
 	},
-	"file": "_nick_five",
-	"folder": "_nick_one",
-	"folderExpanded": "_nick_two",
+	"file": "_nick_005",
+	"folder": "_nick_001",
+	"folderExpanded": "_nick_002",
 	"folderNames": {
-		".vscode": "_nick_one"
+		".vscode": "_nick_001"
 	},
 	"fileExtensions": {
-		"css": "_nick_four",
-		"js": "_nick_three",
-		"json": "_nick_six",
-		"jsx": "_nick_seven",
-		"md": "_nick_eight",
-		"php": "_nick_nine",
-		"ts": "_nick_ten",
-		"tsx": "_nick_ten",
+		"css": "_nick_004",
+		"js": "_nick_003",
+		"json": "_nick_006",
+		"jsx": "_nick_003",
+		"md": "_nick_008",
+		"php": "_nick_009",
+		"ts": "_nick_010",
+		"tsx": "_nick_010",
+		"svelte": "_nick_011",
+		"rs": "_nick_007",
+		"toml": "_nick_013",
 		"cs": "_raymond_chen"
 	},
 	"fileNames": {
-		"win.ini": "_nick_one"
+		"win.ini": "_nick_001"
 	}
 }

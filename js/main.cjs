@@ -1,16 +1,25 @@
 const vscode = require("vscode");
 
 const {
-	toggleUseIgnoreFile,
+	toggleUseIgnoreFileMaker,
 } = require("./commands/toggle-use-ignore-files.cjs");
 
-const commands = {
-	"extension.nickToggleUseIgnoreFiles": toggleUseIgnoreFile,
-};
+const commandMakers = [toggleUseIgnoreFileMaker];
+const commands = {};
 
 function activate(context) {
-	Object.entries(commands).forEach(([label, command]) => {
-		context.subscriptions.push(vscode.commands.registerCommand(label, command));
+	commandMakers.forEach((commandMaker) => {
+		const { command, callback } = commandMaker(context);
+
+		context.subscriptions.push(
+			vscode.commands.registerCommand(command, callback)
+		);
+	});
+
+	Object.entries(commands).forEach(([command, callback]) => {
+		context.subscriptions.push(
+			vscode.commands.registerCommand(command, callback)
+		);
 	});
 }
 
