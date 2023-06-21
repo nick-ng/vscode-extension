@@ -5,7 +5,7 @@
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
@@ -130,6 +130,7 @@
 		}
 	},
 	"devDependencies": {
-		"@vscode/vsce": "^2.19.0"
+		"@vscode/vsce": "^2.19.0",
+		"prettier": "2.8.8"
 	}
 }

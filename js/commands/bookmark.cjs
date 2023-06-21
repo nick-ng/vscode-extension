@@ -35,20 +35,17 @@ const htmlForWebview = `
 			for (let i = 0; i < 10; i++) {
 				const el = document.getElementById("b" + i);
 
-				if (message[i]) {
-					el.textContent = message[i];
+				if (message[i]?.label) {
+					el.textContent = message[i].label;
 				} else {
 					el.textContent = "";
 				}
 			}
 		})
 
-		const vscode = acquireVsCodeApi();
-
-		vscode.postMessage({})
+		acquireVsCodeApi().postMessage({});
 	</script>
-</html>
-	`;
+</html>`;
 
 let myPanel;
 
@@ -69,12 +66,25 @@ const viewProvider = {
 };
 
 const makeSetBookmark = (i) => () => {
-	vscode.window.showInformationMessage(`Set ${i}`);
+	const editor = vscode.window.activeTextEditor;
+	const selection = editor.selection;
 
-	const bookmarkName = `test.js:2${i}`;
-	bookmarks[i] = `${i}: ${bookmarkName}`;
+	const pathFragments = editor.document.uri.path.split("/");
 
-	vscode.window.showInformationMessage(`Set ${i} ${JSON.stringify(myPanel)}`);
+	const lineNumber = selection?.start?.line || 0;
+	const columnNumber = selection?.start?.character || 0;
+	const filename = pathFragments[pathFragments.length - 1];
+
+	// @todo(nick-ng): get "current" directory
+	const label = `${i}: ${filename}:${lineNumber + 1}:${columnNumber + 1}`;
+
+	bookmarks[i] = {
+		label,
+		viewColumn: editor.viewColumn,
+		lineNumber,
+		columnNumber,
+		filePath: editor.document.uri.path,
+	};
 
 	if (myPanel) {
 		myPanel.show(true);
@@ -83,7 +93,35 @@ const makeSetBookmark = (i) => () => {
 };
 
 const makeGoToBookmark = (i) => () => {
-	vscode.window.showInformationMessage(`GoTo ${JSON.stringify(bookmarks[i])}`);
+	if (bookmarks[i]) {
+		const { viewColumn, lineNumber, columnNumber, filePath } = bookmarks[i];
+
+		switch (viewColumn) {
+			case 1: {
+				vscode.commands.executeCommand(
+					"workbench.action.focusFirstEditorGroup"
+				);
+				break;
+			}
+			case 2: {
+				vscode.commands.executeCommand(
+					"workbench.action.focusSecondEditorGroup"
+				);
+				break;
+			}
+		}
+
+		vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
+
+		const cursorPosition = new vscode.Position(lineNumber, columnNumber);
+
+		// @todo(nick-ng): figure out a better way to wait for the editor
+		setTimeout(() => {
+			vscode.window.activeTextEditor.selections = [
+				new vscode.Selection(cursorPosition, cursorPosition),
+			];
+		}, 100);
+	}
 };
 
 const bookmarkMaker = (context) => {
