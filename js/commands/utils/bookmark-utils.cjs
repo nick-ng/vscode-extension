@@ -44,23 +44,19 @@ const formatBookmarks = (bookmarks, context) => {
 			? vscode.workspace.workspaceFolders[0].uri.path
 			: null;
 
-	if (!rootPath) {
-		vscode.window.showInformationMessage(
-			JSON.stringify(
-				vscode.workspace.workspaceFolders.map((a) => a.uri.path),
-				null,
-				"  "
-			)
-		);
-	}
-
 	const bookmarksByFilename = {};
 
 	Object.values(bookmarks).forEach((bookmark) => {
 		const { filePath } = bookmark;
-		const pathFragments = (rootPath ? filePath.replace(rootPath, "") : filePath)
-			.split("/")
-			.filter((a) => a);
+
+		let shortPath = filePath;
+
+		if (rootPath) {
+			const re = new RegExp(rootPath.replace(/[^A-Za-z0-9_]/g, "\\$&"), "i");
+			shortPath = filePath.replace(re, "");
+		}
+
+		const pathFragments = shortPath.split("/").filter((a) => a);
 
 		const filename = pathFragments[pathFragments.length - 1];
 

@@ -134,6 +134,8 @@ const makeGoToBookmark = (i) => () => {
 			}
 		}
 
+		vscode.commands.executeCommand("workbench.view.explorer");
+
 		vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
 
 		const cursorPosition = new vscode.Position(lineNumber, columnNumber);
