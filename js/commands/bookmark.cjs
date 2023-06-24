@@ -16,21 +16,35 @@ const htmlForWebview = `
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style>
+			.main {
+				overflowy: hidden;
+			}
+
+			.bookmark {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				align-items: center;
+			}
+		</style>
 	</head>
 	<body>
-		${new Array(10)
-			.fill(0)
-			.map((_, i) =>
-				[
-					"<div>",
-					`<span id=b${i}-id></span>`,
-					`<img style="margin-left: 3px; margin-right: 3px;" id=b${i}-img />`,
-					`<span id=b${i}-filename></span>`,
-					`<span style="margin-left: 6px; color: #888;" id=b${i}-path></span>`,
-					"</div>",
-				].join("")
-			)
-			.join("")}
+		<div class="main">
+			${new Array(10)
+				.fill(0)
+				.map((_, i) =>
+					[
+						'<div class="bookmark">',
+						`<span id=b${i}-id></span>`,
+						`<img style="margin-left: 5px; margin-right: 5px; height: 16px;" id=b${i}-img />`,
+						`<span id=b${i}-filename></span>`,
+						`<span style="margin-left: 5px; color: #888;" id=b${i}-path></span>`,
+						"</div>",
+					].join("")
+				)
+				.join("")}
+		</div>
 	</body>
 	<script>
 		window.addEventListener("message", (event) => {
@@ -104,25 +118,20 @@ const makeGoToBookmark = (i) => () => {
 
 		const all = vscode.workspace.getConfiguration();
 
-		const mine = vscode.workspace.getConfiguration(SWITCH_VIEW_COLUMN_SETTING);
-
-		vscode.window.showInformationMessage(
-			`all: ${all.nick.bookmarks.switchViewColumn}
-mine: ${mine}`
-		);
-
-		switch (viewColumn) {
-			case 1: {
-				vscode.commands.executeCommand(
-					"workbench.action.focusFirstEditorGroup"
-				);
-				break;
-			}
-			case 2: {
-				vscode.commands.executeCommand(
-					"workbench.action.focusSecondEditorGroup"
-				);
-				break;
+		if (all.nick.bookmarks.switchViewColumn) {
+			switch (viewColumn) {
+				case 1: {
+					vscode.commands.executeCommand(
+						"workbench.action.focusFirstEditorGroup"
+					);
+					break;
+				}
+				case 2: {
+					vscode.commands.executeCommand(
+						"workbench.action.focusSecondEditorGroup"
+					);
+					break;
+				}
 			}
 		}
 

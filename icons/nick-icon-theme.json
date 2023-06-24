@@ -52,6 +52,8 @@
 	"fileExtensions": {
 		"css": "_nick_004",
 		"js": "_nick_003",
+		"cjs": "_nick_003",
+		"mjs": "_nick_003",
 		"json": "_nick_006",
 		"jsx": "_nick_003",
 		"md": "_nick_008",

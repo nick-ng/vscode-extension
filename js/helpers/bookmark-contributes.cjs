@@ -19,4 +19,4 @@ for (let i = 0; i < 10; i++) {
 	});
 }
 
-console.log(JSON.stringify([...setCommands, ...goToCommands], null, " "));
+console.info(JSON.stringify([...setCommands, ...goToCommands], null, " "));
