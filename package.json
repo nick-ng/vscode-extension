@@ -5,13 +5,13 @@
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nick-ng/vscode-extension.git"
 	},
-	"icon": "/icons/nick_001.png",
+	"icon": "/nick_001_full.png",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.0.0"

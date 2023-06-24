@@ -44,6 +44,16 @@ const formatBookmarks = (bookmarks, context) => {
 			? vscode.workspace.workspaceFolders[0].uri.path
 			: null;
 
+	if (!rootPath) {
+		vscode.window.showInformationMessage(
+			JSON.stringify(
+				vscode.workspace.workspaceFolders.map((a) => a.uri.path),
+				null,
+				"  "
+			)
+		);
+	}
+
 	const bookmarksByFilename = {};
 
 	Object.values(bookmarks).forEach((bookmark) => {
