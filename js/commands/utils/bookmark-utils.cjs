@@ -61,13 +61,13 @@ const formatBookmarks = (bookmarks, context) => {
 		bookmarksByFilename[filename].push({ pathFragments, ...bookmark });
 	});
 
-	const bookmarkLabels = {};
+	const bookmarkLabels = [];
 
 	Object.entries(bookmarksByFilename).forEach(([filename, bookmarksB]) => {
 		bookmarksB.forEach((bookmark) => {
 			const { id, lineNumber, columnNumber, pathFragments } = bookmark;
 
-			let thisFragments = [];
+			let fewestFragments = 0;
 			// for every other bookmark
 			for (let i = 0; i < bookmarksB.length; i++) {
 				const { id: otherId, pathFragments: otherFragments } = bookmarksB[i];
@@ -81,21 +81,22 @@ const formatBookmarks = (bookmarks, context) => {
 					pathFragments.length
 				);
 
-				thisFragments = [];
-
 				for (let j = 1; j < lowerFragmentCount; j++) {
-					thisFragments = pathFragments.slice(-1 - j);
+					const thisFragments = pathFragments.slice(-1 - j);
 					const otherFragment = otherFragments.slice(-1 - j).join("/");
 
 					if (thisFragments.join("/") !== otherFragment) {
+						fewestFragments = Math.max(fewestFragments, j);
 						break;
 					}
 				}
 			}
 
+			const thisFragments = pathFragments.slice(-1 - fewestFragments);
+
 			let filePath = "";
 
-			if (thisFragments.length > 0) {
+			if (fewestFragments > 0) {
 				filePath = thisFragments.slice(0, thisFragments.length - 1).join("/");
 
 				if (thisFragments.length < pathFragments.length) {
@@ -103,12 +104,12 @@ const formatBookmarks = (bookmarks, context) => {
 				}
 			}
 
-			bookmarkLabels[id] = {
+			bookmarkLabels.push({
 				id: `${id}:`,
 				img: `data:image/png;base64,${getIconB64(context, filename)}`,
 				filename: `${filename}:${lineNumber}:${columnNumber}`,
 				path: filePath,
-			};
+			});
 		});
 	});
 

@@ -4,7 +4,6 @@ const { formatBookmarks } = require("./utils/bookmark-utils.cjs");
 
 const SET_BASE = "extension.nickSetBookmark";
 const GOTO_BASE = "extension.nickGoToBookmark";
-const SWITCH_VIEW_COLUMN_SETTING = "nick.bookmarks.switchViewColumn";
 
 const bookmarks = {};
 
