@@ -1,8 +1,10 @@
 // https://code.visualstudio.com/api/extension-guides/webview#scripts-and-message-passing
 const vscode = require("vscode");
+const { formatBookmarks } = require("./utils/bookmark-utils.cjs");
 
 const SET_BASE = "extension.nickSetBookmark";
 const GOTO_BASE = "extension.nickGoToBookmark";
+const SWITCH_VIEW_COLUMN_SETTING = "nick.bookmarks.switchViewColumn";
 
 const bookmarks = {};
 
@@ -13,33 +15,42 @@ const htmlForWebview = `
 	<html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>asdf</title>
+		<title></title>
 	</head>
 	<body>
-		<div id="b0"></div>
-		<div id="b1"></div>
-		<div id="b2"></div>
-		<div id="b3"></div>
-		<div id="b4"></div>
-		<div id="b5"></div>
-		<div id="b6"></div>
-		<div id="b7"></div>
-		<div id="b8"></div>
-		<div id="b9"></div>
+		${new Array(10)
+			.fill(0)
+			.map((_, i) =>
+				[
+					"<div>",
+					`<span id=b${i}-id></span>`,
+					`<img style="margin-left: 3px; margin-right: 3px;" id=b${i}-img />`,
+					`<span id=b${i}-filename></span>`,
+					`<span style="margin-left: 6px; color: #888;" id=b${i}-path></span>`,
+					"</div>",
+				].join("")
+			)
+			.join("")}
 	</body>
 	<script>
-
 		window.addEventListener("message", (event) => {
 			const message = event.data;
 
 			for (let i = 0; i < 10; i++) {
-				const el = document.getElementById("b" + i);
+				const elId = document.getElementById("b" + i + "-id");
+				const elFilename = document.getElementById("b" + i + "-id");
 
-				if (message[i]?.label) {
-					el.textContent = message[i].label;
-				} else {
-					el.textContent = "";
-				}
+				["id", "img", "filename", "path"].forEach((key) => {
+					const el = document.getElementById("b" + i + "-" + key);
+
+					const value = message[i] ? message[i][key] : "";
+
+					if (key === "img") {
+						el.setAttribute("src", value);
+					} else {
+						el.textContent = value;
+					}
+				})
 			}
 		})
 
@@ -49,7 +60,7 @@ const htmlForWebview = `
 
 let myPanel;
 
-const viewProvider = {
+const viewProvider = (context) => ({
 	resolveWebviewView: (panel, _context, _token) => {
 		myPanel = panel;
 
@@ -60,26 +71,21 @@ const viewProvider = {
 		panel.webview.html = htmlForWebview;
 
 		panel.webview.onDidReceiveMessage(() => {
-			panel.webview.postMessage(bookmarks);
+			panel.webview.postMessage(formatBookmarks(bookmarks, context));
 		});
 	},
-};
+});
 
-const makeSetBookmark = (i) => () => {
+const makeSetBookmark = (i, context) => () => {
 	const editor = vscode.window.activeTextEditor;
 	const selection = editor.selection;
 
-	const pathFragments = editor.document.uri.path.split("/");
-
 	const lineNumber = selection?.start?.line || 0;
 	const columnNumber = selection?.start?.character || 0;
-	const filename = pathFragments[pathFragments.length - 1];
-
-	// @todo(nick-ng): get "current" directory
-	const label = `${i}: ${filename}:${lineNumber + 1}:${columnNumber + 1}`;
 
 	bookmarks[i] = {
-		label,
+		id: i,
+
 		viewColumn: editor.viewColumn,
 		lineNumber,
 		columnNumber,
@@ -88,13 +94,22 @@ const makeSetBookmark = (i) => () => {
 
 	if (myPanel) {
 		myPanel.show(true);
-		myPanel.webview.postMessage(bookmarks);
+		myPanel.webview.postMessage(formatBookmarks(bookmarks, context));
 	}
 };
 
 const makeGoToBookmark = (i) => () => {
 	if (bookmarks[i]) {
 		const { viewColumn, lineNumber, columnNumber, filePath } = bookmarks[i];
+
+		const all = vscode.workspace.getConfiguration();
+
+		const mine = vscode.workspace.getConfiguration(SWITCH_VIEW_COLUMN_SETTING);
+
+		vscode.window.showInformationMessage(
+			`all: ${all.nick.bookmarks.switchViewColumn}
+mine: ${mine}`
+		);
 
 		switch (viewColumn) {
 			case 1: {
@@ -117,6 +132,7 @@ const makeGoToBookmark = (i) => () => {
 
 		// @todo(nick-ng): figure out a better way to wait for the editor
 		setTimeout(() => {
+			// @todo(nick-ng): use cursor move to move cursor
 			vscode.window.activeTextEditor.selections = [
 				new vscode.Selection(cursorPosition, cursorPosition),
 			];
@@ -130,7 +146,7 @@ const bookmarkMaker = (context) => {
 		const commandGoTo = `${GOTO_BASE}${i}`;
 
 		context.subscriptions.push(
-			vscode.commands.registerCommand(commandSet, makeSetBookmark(i))
+			vscode.commands.registerCommand(commandSet, makeSetBookmark(i, context))
 		);
 
 		context.subscriptions.push(
@@ -139,7 +155,11 @@ const bookmarkMaker = (context) => {
 	}
 
 	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(viewName, viewProvider)
+		vscode.window.registerWebviewViewProvider(viewName, viewProvider(context), {
+			webviewOptions: {
+				localResourceRoots: [`${context.extensionPath}\\icons`],
+			},
+		})
 	);
 };
 

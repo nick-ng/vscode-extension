@@ -5,7 +5,7 @@
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
@@ -111,6 +111,16 @@
 				"title": "Nick: Go To Bookmark 9"
 			}
 		],
+		"configuration": {
+			"title": "Nick's Extension",
+			"properties": {
+				"nick.bookmarks.switchViewColumn": {
+					"type": "boolean",
+					"default": false,
+					"description": "Switch view column (editor group) when navigating to bookmarks"
+				}
+			}
+		},
 		"iconThemes": [
 			{
 				"id": "vs-nick",
