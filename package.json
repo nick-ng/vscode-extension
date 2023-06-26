@@ -5,7 +5,7 @@
 	"categories": [
 		"Themes"
 	],
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"publisher": "nick-ng",
 	"repository": {
 		"type": "git",
@@ -29,6 +29,10 @@
 			{
 				"command": "extension.nickToggleUseIgnoreFiles",
 				"title": "Nick: Toggle Use Ignore Files"
+			},
+			{
+				"command": "extension.nickQuickOpen",
+				"title": "Nick: Quick Open + Bookmark stuff"
 			},
 			{
 				"command": "extension.nickSetBookmark0",

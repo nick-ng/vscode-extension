@@ -26,6 +26,10 @@ const htmlForWebview = `
 				flex-wrap: nowrap;
 				align-items: center;
 			}
+
+			.buffer {
+				margin-bottom: 5px;
+			}
 		</style>
 	</head>
 	<body>
@@ -34,11 +38,11 @@ const htmlForWebview = `
 				.fill(0)
 				.map((_, i) =>
 					[
-						'<div class="bookmark">',
-						`<span id=b${i}-id></span>`,
-						`<img style="margin-left: 5px; margin-right: 5px; height: 16px;" id=b${i}-img />`,
-						`<span id=b${i}-filename></span>`,
-						`<span style="margin-left: 5px; color: #888;" id=b${i}-path></span>`,
+						`<div id="b${i}-container" class="bookmark">`,
+						`<span id="b${i}-id"></span>`,
+						`<img style="margin-left: 5px; margin-right: 5px; height: 16px;" id="b${i}-img" />`,
+						`<span id="b${i}-filename"></span>`,
+						`<span style="margin-left: 5px; color: #888;" id="b${i}-path"></span>`,
 						"</div>",
 					].join("")
 				)
@@ -48,6 +52,13 @@ const htmlForWebview = `
 	<script>
 		window.addEventListener("message", (event) => {
 			const message = event.data;
+
+			const containerEl = document.getElementById("b0-container");
+			if (message[0].idNumber === 0) {
+				containerEl.classList.add("buffer");
+			} else {
+				containerEl.classList.remove("buffer");
+			}
 
 			for (let i = 0; i < 10; i++) {
 				const elId = document.getElementById("b" + i + "-id");
@@ -89,20 +100,31 @@ const viewProvider = (context) => ({
 	},
 });
 
-const makeSetBookmark = (i, context) => () => {
+const getBookmark = () => {
 	const editor = vscode.window.activeTextEditor;
 	const selection = editor.selection;
 
-	const lineNumber = selection?.start?.line || 0;
-	const columnNumber = selection?.start?.character || 0;
+	const lineNumber = selection?.active?.line || 0;
+	const columnNumber = selection?.active?.character || 0;
 
-	bookmarks[i] = {
-		id: i,
+	const filePath = editor.document.uri.path;
 
-		viewColumn: editor.viewColumn,
+	const viewColumn = editor.viewColumn;
+
+	return {
+		viewColumn,
 		lineNumber,
 		columnNumber,
-		filePath: editor.document.uri.path,
+		filePath,
+		hash: [filePath, lineNumber, columnNumber].join(":"),
+		viewColumnHash: [viewColumn, filePath, lineNumber, columnNumber].join(":"),
+	};
+};
+
+const makeSetBookmark = (i, context) => () => {
+	bookmarks[i] = {
+		...getBookmark(),
+		id: i,
 	};
 
 	if (myPanel) {
@@ -111,42 +133,107 @@ const makeSetBookmark = (i, context) => () => {
 	}
 };
 
+const centreHack = async (callback) => {
+	const all1 = vscode.workspace.getConfiguration();
+
+	const previousSetting = all1.editor.cursorSurroundingLines;
+
+	await vscode.workspace
+		.getConfiguration()
+		.update(
+			"editor.cursorSurroundingLines",
+			20,
+			vscode.ConfigurationTarget.Global
+		);
+
+	callback();
+
+	await vscode.workspace
+		.getConfiguration()
+		.update(
+			"editor.cursorSurroundingLines",
+			previousSetting,
+			vscode.ConfigurationTarget.Global
+		);
+};
+
+const getSwitchViewColumnSetting = () => {
+	const all = vscode.workspace.getConfiguration();
+
+	return all.nick.bookmarks.switchViewColumn;
+};
+
+const goToBookmark = ({ viewColumn, lineNumber, columnNumber, filePath }) => {
+	if (getSwitchViewColumnSetting()) {
+		switch (viewColumn) {
+			case 1: {
+				vscode.commands.executeCommand(
+					"workbench.action.focusFirstEditorGroup"
+				);
+				break;
+			}
+			case 2: {
+				vscode.commands.executeCommand(
+					"workbench.action.focusSecondEditorGroup"
+				);
+				break;
+			}
+		}
+	}
+
+	vscode.commands.executeCommand("workbench.view.explorer");
+
+	vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
+
+	const cursorPosition = new vscode.Position(lineNumber, columnNumber);
+
+	const editor = vscode.window.activeTextEditor;
+	const selection = editor.selection;
+
+	// @todo(nick-ng): figure out a better way to wait for the editor
+	setTimeout(async () => {
+		const currentLineNumber = selection?.active?.line || 0;
+		const lineDifference = currentLineNumber - lineNumber;
+
+		if (lineDifference !== 0) {
+			vscode.commands.executeCommand("cursorMove", {
+				to: "down",
+				by: "line",
+				value: -lineDifference,
+			});
+		}
+
+		vscode.window.activeTextEditor.selections = [
+			new vscode.Selection(cursorPosition, cursorPosition),
+		];
+	}, 100);
+};
+
 const makeGoToBookmark = (i) => () => {
 	if (bookmarks[i]) {
-		const { viewColumn, lineNumber, columnNumber, filePath } = bookmarks[i];
+		const currentBookmark = getBookmark();
 
-		const all = vscode.workspace.getConfiguration();
-
-		if (all.nick.bookmarks.switchViewColumn) {
-			switch (viewColumn) {
-				case 1: {
-					vscode.commands.executeCommand(
-						"workbench.action.focusFirstEditorGroup"
-					);
-					break;
-				}
-				case 2: {
-					vscode.commands.executeCommand(
-						"workbench.action.focusSecondEditorGroup"
-					);
-					break;
-				}
+		if (getSwitchViewColumnSetting()) {
+			if (bookmarks[i].viewColumnHash === currentBookmark.viewColumnHash) {
+				return;
+			}
+		} else {
+			if (bookmarks[i].hash === currentBookmark.hash) {
+				return;
 			}
 		}
 
-		vscode.commands.executeCommand("workbench.view.explorer");
+		if (i === 0) {
+			const originalBookmark = { ...bookmarks[i] };
 
-		vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
+			vscode.commands.executeCommand("extension.nickSetBookmark0");
 
-		const cursorPosition = new vscode.Position(lineNumber, columnNumber);
+			goToBookmark(originalBookmark);
+		} else {
+			vscode.commands.executeCommand("extension.nickSetBookmark0");
 
-		// @todo(nick-ng): figure out a better way to wait for the editor
-		setTimeout(() => {
-			// @todo(nick-ng): use cursor move to move cursor
-			vscode.window.activeTextEditor.selections = [
-				new vscode.Selection(cursorPosition, cursorPosition),
-			];
-		}, 100);
+			goToBookmark(bookmarks[i]);
+		}
 	}
 };
 
@@ -169,6 +256,13 @@ const bookmarkMaker = (context) => {
 			webviewOptions: {
 				localResourceRoots: [`${context.extensionPath}\\icons`],
 			},
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand("extension.nickQuickOpen", () => {
+			vscode.commands.executeCommand("extension.nickSetBookmark0");
+			vscode.commands.executeCommand("workbench.action.quickOpen");
 		})
 	);
 };

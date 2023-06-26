@@ -111,15 +111,16 @@ const formatBookmarks = (bookmarks, context) => {
 			}
 
 			bookmarkLabels.push({
+				idNumber: id,
 				id: `${id}:`,
 				img: `data:image/png;base64,${getIconB64(context, filename)}`,
-				filename: `${filename}:${lineNumber}:${columnNumber}`,
+				filename: `${filename}:${lineNumber + 1}:${columnNumber + 1}`,
 				path: filePath,
 			});
 		});
 	});
 
-	return bookmarkLabels;
+	return bookmarkLabels.sort((a, b) => a.idNumber - b.idNumber);
 };
 
 module.exports = {

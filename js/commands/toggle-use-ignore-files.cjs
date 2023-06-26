@@ -35,7 +35,7 @@ const toggleUseIgnoreFileMaker = (context) => {
 	myStatusBar.show();
 	myStatusBar.command = command;
 
-	const callback = async () => {
+	const toggleUseIgnore = async () => {
 		vscode.commands.executeCommand("workbench.action.closeQuickOpen");
 
 		const nextSetting = !getUseIgnoreFilesState();
@@ -52,7 +52,7 @@ const toggleUseIgnoreFileMaker = (context) => {
 	};
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand(command, callback)
+		vscode.commands.registerCommand(command, toggleUseIgnore)
 	);
 };
 
