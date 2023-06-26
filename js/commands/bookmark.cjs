@@ -133,30 +133,6 @@ const makeSetBookmark = (i, context) => () => {
 	}
 };
 
-const centreHack = async (callback) => {
-	const all1 = vscode.workspace.getConfiguration();
-
-	const previousSetting = all1.editor.cursorSurroundingLines;
-
-	await vscode.workspace
-		.getConfiguration()
-		.update(
-			"editor.cursorSurroundingLines",
-			20,
-			vscode.ConfigurationTarget.Global
-		);
-
-	callback();
-
-	await vscode.workspace
-		.getConfiguration()
-		.update(
-			"editor.cursorSurroundingLines",
-			previousSetting,
-			vscode.ConfigurationTarget.Global
-		);
-};
-
 const getSwitchViewColumnSetting = () => {
 	const all = vscode.workspace.getConfiguration();
 
