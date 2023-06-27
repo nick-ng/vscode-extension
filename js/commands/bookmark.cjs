@@ -30,6 +30,10 @@ const htmlForWebview = `
 			.buffer {
 				margin-bottom: 5px;
 			}
+
+			.hidden {
+				display: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -38,7 +42,7 @@ const htmlForWebview = `
 				.fill(0)
 				.map((_, i) =>
 					[
-						`<div id="b${i}-container" class="bookmark">`,
+						`<div id="b${i}-container" class="bookmark hidden">`,
 						`<span id="b${i}-id"></span>`,
 						`<img style="margin-left: 5px; margin-right: 5px; height: 16px;" id="b${i}-img" />`,
 						`<span id="b${i}-filename"></span>`,
@@ -61,6 +65,13 @@ const htmlForWebview = `
 			}
 
 			for (let i = 0; i < 10; i++) {
+				const containerEl = document.getElementById("b" + i + "-container");
+				if (!message[i]) {
+					containerEl.classList.add("hidden");
+				} else {
+					containerEl.classList.remove("hidden");
+				}
+
 				const elId = document.getElementById("b" + i + "-id");
 				const elFilename = document.getElementById("b" + i + "-id");
 
