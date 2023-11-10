@@ -6,4 +6,4 @@ My VS Code Extension
 
 ### ToDo Comments
 
-- js/commands/bookmark.cjs:180: @todo(nick-ng): figure out a better way to wait for the editor
+- js/commands/bookmark.cjs:181: @todo(nick-ng): figure out a better way to wait for the editor

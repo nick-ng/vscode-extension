@@ -28,18 +28,12 @@ const updateStatusBar = (state) => {
 };
 
 const toggleUseIgnoreFileMaker = (context) => {
-	const startingSetting = getUseIgnoreFilesState();
-
-	updateStatusBar(startingSetting);
+	updateStatusBar(getUseIgnoreFilesState());
 
 	myStatusBar.show();
 	myStatusBar.command = command;
 
-	const toggleUseIgnore = async () => {
-		vscode.commands.executeCommand("workbench.action.closeQuickOpen");
-
-		const nextSetting = !getUseIgnoreFilesState();
-
+	const setUseIgnore = async (nextSetting) => {
 		await vscode.workspace
 			.getConfiguration()
 			.update(
@@ -49,6 +43,26 @@ const toggleUseIgnoreFileMaker = (context) => {
 			);
 
 		updateStatusBar(nextSetting);
+	};
+
+	let resetEnableUseIgnoreTimeout = null;
+
+	const toggleUseIgnore = async () => {
+		vscode.commands.executeCommand("workbench.action.closeQuickOpen");
+
+		const nextSetting = !getUseIgnoreFilesState();
+
+		await setUseIgnore(nextSetting);
+
+		vscode.commands.executeCommand("extension.nickQuickOpen");
+
+		if (typeof resetEnableUseIgnoreTimeout === "number") {
+			clearTimeout(resetEnableUseIgnoreTimeout);
+		}
+
+		setTimeout(() => {
+			setUseIgnore(!nextSetting);
+		}, 5000);
 	};
 
 	context.subscriptions.push(

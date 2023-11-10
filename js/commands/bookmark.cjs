@@ -4,6 +4,7 @@ const { formatBookmarks } = require("./utils/bookmark-utils.cjs");
 
 const SET_BASE = "extension.nickSetBookmark";
 const GOTO_BASE = "extension.nickGoToBookmark";
+const SLEEP_DELAY_MS = 5;
 
 const bookmarks = {};
 
@@ -179,21 +180,46 @@ const goToBookmark = ({ viewColumn, lineNumber, columnNumber, filePath }) => {
 
 	// @todo(nick-ng): figure out a better way to wait for the editor
 	setTimeout(async () => {
-		const currentLineNumber = selection?.active?.line || 0;
-		const lineDifference = currentLineNumber - lineNumber;
+		vscode.window.activeTextEditor.selections = [
+			new vscode.Selection(cursorPosition, cursorPosition),
+		];
 
-		if (lineDifference !== 0) {
-			vscode.commands.executeCommand("cursorMove", {
-				to: "down",
-				by: "line",
-				value: -lineDifference,
-			});
-		}
+		await new Promise((resolve) => {
+			setTimeout(resolve, SLEEP_DELAY_MS);
+		});
+
+		vscode.commands.executeCommand("cursorMove", {
+			to: "down",
+			by: "line",
+			value: 1,
+		});
+
+		await new Promise((resolve) => {
+			setTimeout(resolve, SLEEP_DELAY_MS);
+		});
 
 		vscode.window.activeTextEditor.selections = [
 			new vscode.Selection(cursorPosition, cursorPosition),
 		];
-	}, 100);
+
+		await new Promise((resolve) => {
+			setTimeout(resolve, SLEEP_DELAY_MS);
+		});
+
+		vscode.commands.executeCommand("cursorMove", {
+			to: "up",
+			by: "line",
+			value: 1,
+		});
+
+		await new Promise((resolve) => {
+			setTimeout(resolve, SLEEP_DELAY_MS);
+		});
+
+		vscode.window.activeTextEditor.selections = [
+			new vscode.Selection(cursorPosition, cursorPosition),
+		];
+	}, SLEEP_DELAY_MS * 10);
 };
 
 const makeGoToBookmark = (i) => () => {
@@ -223,6 +249,8 @@ const makeGoToBookmark = (i) => () => {
 		}
 	}
 };
+
+let resetEnableUseIgnoreTimeout = null;
 
 const bookmarkMaker = (context) => {
 	for (let i = 0; i < 10; i++) {
