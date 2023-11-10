@@ -39,6 +39,9 @@
 		"_nick_013": {
 			"iconPath": "./nick_013.png"
 		},
+		"_nick_014": {
+			"iconPath": "./nick_014.png"
+		},
 		"_raymond_chen": {
 			"iconPath": "./raymond-chen.png"
 		}
@@ -63,6 +66,7 @@
 		"svelte": "_nick_011",
 		"rs": "_nick_007",
 		"toml": "_nick_013",
+		"go": "_nick_014",
 		"cs": "_raymond_chen"
 	},
 	"fileNames": {
