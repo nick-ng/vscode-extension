@@ -61,7 +61,7 @@ const toggleUseIgnoreFileMaker = (context) => {
 		}
 
 		setTimeout(() => {
-			setUseIgnore(!nextSetting);
+			setUseIgnore(true);
 		}, 5000);
 	};
 
