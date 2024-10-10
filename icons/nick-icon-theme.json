@@ -6,41 +6,44 @@
 		"_nick_002": {
 			"iconPath": "./nick_002.png"
 		},
-		"_nick_003": {
-			"iconPath": "./nick_003.png"
+		"_nick_js": {
+			"iconPath": "./nick_js.png"
 		},
-		"_nick_004": {
-			"iconPath": "./nick_004.png"
+		"_nick_css": {
+			"iconPath": "./nick_css.png"
 		},
 		"_nick_005": {
 			"iconPath": "./nick_005.png"
 		},
-		"_nick_006": {
-			"iconPath": "./nick_006.png"
+		"_nick_json": {
+			"iconPath": "./nick_json.png"
 		},
-		"_nick_007": {
-			"iconPath": "./nick_007.png"
+		"_nick_rs": {
+			"iconPath": "./nick_rs.png"
 		},
-		"_nick_008": {
-			"iconPath": "./nick_008.png"
+		"_nick_md": {
+			"iconPath": "./nick_md.png"
 		},
-		"_nick_009": {
-			"iconPath": "./nick_009.png"
+		"_nick_php": {
+			"iconPath": "./nick_php.png"
 		},
-		"_nick_010": {
-			"iconPath": "./nick_010.png"
+		"_nick_ts": {
+			"iconPath": "./nick_ts.png"
 		},
-		"_nick_011": {
-			"iconPath": "./nick_011.png"
+		"_nick_svelte": {
+			"iconPath": "./nick_svelte.png"
 		},
 		"_nick_012": {
 			"iconPath": "./nick_012.png"
 		},
-		"_nick_013": {
-			"iconPath": "./nick_013.png"
+		"_nick_toml": {
+			"iconPath": "./nick_toml.png"
 		},
-		"_nick_014": {
-			"iconPath": "./nick_014.png"
+		"_nick_go": {
+			"iconPath": "./nick_go.png"
+		},
+		"_nick_zig": {
+			"iconPath": "./nick_zig.png"
 		},
 		"_raymond_chen": {
 			"iconPath": "./raymond-chen.png"
@@ -53,20 +56,21 @@
 		".vscode": "_nick_001"
 	},
 	"fileExtensions": {
-		"css": "_nick_004",
-		"js": "_nick_003",
-		"cjs": "_nick_003",
-		"mjs": "_nick_003",
-		"json": "_nick_006",
-		"jsx": "_nick_003",
-		"md": "_nick_008",
-		"php": "_nick_009",
-		"ts": "_nick_010",
-		"tsx": "_nick_010",
-		"svelte": "_nick_011",
-		"rs": "_nick_007",
-		"toml": "_nick_013",
-		"go": "_nick_014",
+		"css": "_nick_css",
+		"js": "_nick_js",
+		"cjs": "_nick_js",
+		"mjs": "_nick_js",
+		"jsx": "_nick_js",
+		"json": "_nick_json",
+		"md": "_nick_md",
+		"php": "_nick_php",
+		"ts": "_nick_ts",
+		"tsx": "_nick_ts",
+		"svelte": "_nick_svelte",
+		"rs": "_nick_rs",
+		"toml": "_nick_toml",
+		"go": "_nick_go",
+		"zig": "_nick_zig",
 		"cs": "_raymond_chen"
 	},
 	"fileNames": {
